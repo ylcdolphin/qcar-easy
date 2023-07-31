@@ -22,7 +22,6 @@ function trail () {
 basic.forever(function () {
     if (start == 1) {
         trail()
-        basic.pause(100)
     } else {
         maqueen.motorStop(maqueen.Motors.All)
     }
