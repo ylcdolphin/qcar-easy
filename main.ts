@@ -1,28 +1,43 @@
-let start = 0
+let 開始 = 0
+function 左轉 () {
+    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 50)
+    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 75)
+}
+function 右轉 () {
+    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 75)
+    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 50)
+}
 IR.IR_callbackUser(function (message) {
     if (message == 1) {
-        start = 1
+        開始 = 1
     } else {
-        start = 0
+        開始 = 0
     }
 })
-function trail () {
+function 後退 () {
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, 50)
+}
+function 停車 () {
+    maqueen.motorStop(maqueen.Motors.All)
+}
+function 前進 () {
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 100)
+}
+function 循跡 () {
     if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 75)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 50)
+        右轉()
     } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 50)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 75)
+        左轉()
     } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, 50)
+        後退()
     } else {
-        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 100)
+        前進()
     }
 }
 basic.forever(function () {
-    if (start == 1) {
-        trail()
+    if (開始 == 1) {
+        循跡()
     } else {
-        maqueen.motorStop(maqueen.Motors.All)
+        停車()
     }
 })
